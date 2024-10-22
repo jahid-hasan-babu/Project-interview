@@ -1,5 +1,6 @@
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useCartStore from "../store/useCartStore";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const {
@@ -24,19 +25,19 @@ const Cart = () => {
               <table className="overflow-x-auto w-full">
                 <thead>
                   <tr className="border-b-4 border-gray-300">
-                    <th className="text-[14.4px] w-6/12 font-bold p-[7px] text-black">
+                    <th className="text-[14.4px] w-6/12 font-bold p-[2px] md:p-[7px] text-black">
                       Course
                     </th>
                     <th className="text-[14.4px] font-bold p-[7px] text-black">
                       Price
                     </th>
-                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                    <th className="text-[14.4px] font-bold md:p-[7px] text-black">
                       Quantity
                     </th>
                     <th className="text-[14.4px] font-bold p-[7px] text-black">
                       Sub Total
                     </th>
-                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                    <th className="text-[14.4px] font-bold p-[4px] md:p-[7px] text-black">
                       Remove
                     </th>
                   </tr>
@@ -44,21 +45,25 @@ const Cart = () => {
                 <tbody>
                   {cart.map((course) => (
                     <tr key={course.id} className="border-b">
-                      <td className="p-4 text-[14px]">{course.course_name}</td>
+                      <td className="p-2 md:p-4 text-[14px]">
+                        {course.course_name}
+                      </td>
                       <td className="p-4 text-[14px]">
                         Tk {course.discount_price}
                       </td>
-                      <td className="p-4 text-[14px]">
+                      <td className="p-1 md:p-4 text-[14px]">
                         <div className="flex items-center">
                           <button
-                            className="px-2 py-1 border rounded-l hover:bg-gray-200"
+                            className="px-1 md:px-2 py-1 border rounded-l hover:bg-gray-200"
                             onClick={() => decrementQuantity(course.id)}
                           >
                             -
                           </button>
-                          <span className="px-4">{course.quantity}</span>
+                          <span className="px-2 md:px-4">
+                            {course.quantity}
+                          </span>
                           <button
-                            className="px-2 py-1 border rounded-r hover:bg-gray-200"
+                            className="px-1 md:px-2 py-1 border rounded-r hover:bg-gray-200"
                             onClick={() => incrementQuantity(course.id)}
                           >
                             +
@@ -68,7 +73,7 @@ const Cart = () => {
                       <td className="p-4 text-[14px]">
                         Tk {course.discount_price * course.quantity}
                       </td>
-                      <td className="p-4 text-[14px]">
+                      <td className="p-2 md:p-4 text-[14px]">
                         <button
                           className="text-red-500 hover:text-red-700"
                           onClick={() => removeFromCart(course.id)}
@@ -89,9 +94,12 @@ const Cart = () => {
                 <span className="text-md font-medium">Total Price:</span>
                 <span className="text-md font-bold">Tk {totalPrice}</span>
               </div>
-              <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full font-bold text-md">
-                Proceed to Checkout
-              </button>
+              <Link to="/checkout">
+                {" "}
+                <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full font-bold text-md">
+                  Proceed to Checkout
+                </button>
+              </Link>
             </div>
           </div>
         ) : (
