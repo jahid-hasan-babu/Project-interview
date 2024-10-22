@@ -1,5 +1,5 @@
 import { MdMenu } from "react-icons/md";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OrderContext } from "../../ContextAPIs/OrderProvider";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
@@ -8,14 +8,18 @@ import useUser from "../../Security/useUser";
 import { FaUserCircle } from "react-icons/fa";
 import useSmallScreen from "../../Hooks/useSmallScreen";
 import { FaCartArrowDown } from "react-icons/fa";
+import useCartStore from "../../Page/store/useCartStore";
 
 const NavbarTop = () => {
+  const { getTotalCount, cart } = useCartStore(); // Access cart and total count from Zustand
   const { open, setOpen, sidebarRef } = useContext(OrderContext);
   const [isSmallScreen] = useSmallScreen();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const [userData, , refetch] = useUser();
   const imgUrl = `https://littleaccount.com/uploads/userProfile/`;
+
+  const [showCartDetails, setShowCartDetails] = useState(false); // Manage cart hover state
 
   const handleLogout = async () => {
     try {
@@ -71,12 +75,42 @@ const NavbarTop = () => {
 
         <div className="hidden lg:block"></div>
 
-        <div className="flex items-center ">
-          <Link className="relative flex items-center">
+        <div className="flex items-center">
+          <Link
+            to="/cart"
+            className="relative flex items-center"
+            onMouseEnter={() => setShowCartDetails(true)}
+            onMouseLeave={() => setShowCartDetails(false)}
+          >
             <FaCartArrowDown className="w-[35px] h-[35px] text-black" />
             <div className="badge badge-primary bg-purple rounded-full text-white text-xs absolute top-0 right-0 transform translate-x-1 -translate-y-1 w-5 h-5 flex items-center justify-center">
-              0
+              {getTotalCount()}
             </div>
+
+            {/* Cart Details Dropdown */}
+            {showCartDetails && (
+              <div className="absolute top-10 right-0 bg-white shadow-lg rounded-md p-4 w-64 z-50">
+                {cart.length > 0 ? (
+                  <ul>
+                    {cart.map((course) => (
+                      <li
+                        key={course.id}
+                        className="flex justify-between items-center py-2 border-b"
+                      >
+                        <span className="text-sm font-medium text-black">
+                          {course.course_name}
+                        </span>
+                        <span className="text-sm font-semibold text-black">
+                          ${course.discount_price}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-center">Your cart is empty</p>
+                )}
+              </div>
+            )}
           </Link>
 
           <div className="flex flex-col items-center justify-center text-text_sm font-semibold relative group">

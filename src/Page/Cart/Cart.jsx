@@ -1,134 +1,105 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-
 import { RiDeleteBin5Line } from "react-icons/ri";
+import useCartStore from "../store/useCartStore";
 
 const Cart = () => {
-   
+  const {
+    cart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    getTotalPrice,
+  } = useCartStore();
 
-    return (
-        <div className="m-mt_16px">
-           
-            <h1 className="text-sm text-start md:text-text_xl lg:py-0 font-bold">
-                Cart
-            </h1>
-            <div className="pt-p_16px">
-                <div className="lg:flex items-start gap-3">
-                    <div className="w-full lg:w-[58%] bg-white border-2">
-                        <table className=" overflow-x-auto  w-full">
-                            <thead>
-                                <tr className="border-b-4 border-gray-300">
-                                    <th className="text-[14.4px] w-6/12 font-bold p-[7px] text-black">
-                                        Course
-                                    </th>
-                                    <th className="text-[14.4px] font-bold p-[7px] text-black">
-                                        Price
-                                    </th>
-                                    <th className="text-[14.4px] font-bold p-[7px] text-black">
-                                        Quantity
-                                    </th>
-                                    <th className="text-[14.4px] font-bold p-[7px] text-black">
-                                        Sub Total
-                                    </th>
-                                </tr>
-                            </thead>
+  const totalPrice = getTotalPrice(); // Use the computed value
 
-                            <tbody className="overflow-x-auto ">
-                              
-                                    <tr  className="border-b border-gray-300 overflow-x-auto">
-                                        <td>
-                                            <div className="flex items-center justify-center ">
-                                                <div className="w-[20%] text-center flex items-center justify-center ">
-                                                    <RiDeleteBin5Line
-                                                        className="text-xl hover:text-footer_color cursor-pointer"
-                                                        
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col text-center justify-center items-center py-2  w-[80%]">
-                                                    <div className="mask">
-                                                        <img
-                                                            className="h-[40px] w-[70px]"
-                                                            src=''
-                                                            alt='Course'
-                                                        />
-                                                    </div>
-                                                    <p className="text-[14.4px] px-[7px] text-center flex ">
-                                                       Course name  <span className="hidden lg:flex ">- unit name</span>
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p className="text-[14.4px] font-bold p-[7px] text-black text-center">
-                                                discount price
-                                            </p>
-                                        </td>
-                                        <td>
-                                            <div className="flex justify-center">
-                                                <div className="border">
-                                                    <button
-                                                        className="px-4 w-[30px] font-bold font_standard my-1.5"
-                                                        
-                                                    >
-                                                        -
-                                                    </button>
-                                                </div>
-                                                <div className="border-y">
-                                                    <input
-                                                        type="number"
-                                                        className="font-bold w-[30px] lg:w-[60px] font_standard px-2 text-center mx-auto h-full"
-                                                      
-                                                    />
-                                                </div>
-                                                <div className="border">
-                                                    <button
-                                                        className="px-4 w-[30px] font-bold font_standard my-1.5"
-                                                       
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p className="text-[14.4px] font-bold p-[7px] text-black text-center">
-                                               
-                                                discount price * quantity
-                                            </p>
-                                        </td>
-                                    </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="lg:w-[41%] bg-white border-2 ">
-                        <div className="px-[30px]">
-                            <h2 className="font-bold text-start text-text_medium pt-2 pb-1 border-b-2 border-black">
-                                Cart Summary
-                            </h2>
-                            <div className="py-3 flex justify-between border-b border-gray-300">
-                                <p className="text-black font-bold">Total Price</p>
-                                <p className="text-black font-bold">
-                                    
-                                </p>
-                            </div>
-                          
-                            <Link
-                                to={`/cart/checkout`}
-                                state={"bdt"}
-                                className="font-medium text-black mb-2 border-2 hover:bg-[#D2C5A2] duration-300 py-2 px-4  block text-center mx-auto w-full"
-                            >
-                                PROCEED TO CHECKOUT
-                            </Link>
+  return (
+    <div className="m-mt_16px">
+      <h1 className="text-sm text-start md:text-text_xl lg:py-0 font-bold">
+        Cart
+      </h1>
+      <div className="pt-p_16px">
+        {cart.length > 0 ? (
+          <div className="lg:flex items-start gap-3">
+            <div className="w-full lg:w-[58%] bg-white border-2">
+              <table className="overflow-x-auto w-full">
+                <thead>
+                  <tr className="border-b-4 border-gray-300">
+                    <th className="text-[14.4px] w-6/12 font-bold p-[7px] text-black">
+                      Course
+                    </th>
+                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                      Price
+                    </th>
+                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                      Quantity
+                    </th>
+                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                      Sub Total
+                    </th>
+                    <th className="text-[14.4px] font-bold p-[7px] text-black">
+                      Remove
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.map((course) => (
+                    <tr key={course.id} className="border-b">
+                      <td className="p-4 text-[14px]">{course.course_name}</td>
+                      <td className="p-4 text-[14px]">
+                        Tk {course.discount_price}
+                      </td>
+                      <td className="p-4 text-[14px]">
+                        <div className="flex items-center">
+                          <button
+                            className="px-2 py-1 border rounded-l hover:bg-gray-200"
+                            onClick={() => decrementQuantity(course.id)}
+                          >
+                            -
+                          </button>
+                          <span className="px-4">{course.quantity}</span>
+                          <button
+                            className="px-2 py-1 border rounded-r hover:bg-gray-200"
+                            onClick={() => incrementQuantity(course.id)}
+                          >
+                            +
+                          </button>
                         </div>
-                    </div>
-                </div>
+                      </td>
+                      <td className="p-4 text-[14px]">
+                        Tk {course.discount_price * course.quantity}
+                      </td>
+                      <td className="p-4 text-[14px]">
+                        <button
+                          className="text-red-500 hover:text-red-700"
+                          onClick={() => removeFromCart(course.id)}
+                        >
+                          <RiDeleteBin5Line size={20} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-        </div>
-    );
+
+            {/* Total Price Summary */}
+            <div className="w-full lg:w-[40%] bg-white p-4 border-2">
+              <h2 className="text-xl font-semibold mb-4">Cart Summary</h2>
+              <div className="flex justify-between">
+                <span className="text-md font-medium">Total Price:</span>
+                <span className="text-md font-bold">Tk {totalPrice}</span>
+              </div>
+              <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full font-bold text-md">
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-600 text-lg">Your cart is empty.</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Cart;
