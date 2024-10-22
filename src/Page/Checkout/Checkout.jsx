@@ -459,8 +459,14 @@ const Checkout = () => {
                       <td>
                         <div className="flex items-center justify-center">
                           <div className="w-[20%] text-center flex items-center justify-center">
-                            <button onClick={() => removeFromCart(course.id)}>
-                              <RiDeleteBin5Line className="text-xl hover:text-footer_color cursor-pointer" />
+                            <button
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => {
+                                removeFromCart(course.id);
+                                toast.success(`Cart remove successfully!`);
+                              }}
+                            >
+                              <RiDeleteBin5Line size={20} />
                             </button>
                           </div>
                           <div className="flex flex-col text-center justify-center items-center py-2 w-[80%]">
@@ -536,6 +542,7 @@ const Checkout = () => {
           </div>
         </div>
       </form>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

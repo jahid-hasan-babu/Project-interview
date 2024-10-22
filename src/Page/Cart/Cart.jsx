@@ -1,6 +1,7 @@
 import { RiDeleteBin5Line } from "react-icons/ri";
 import useCartStore from "../store/useCartStore";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Cart = () => {
   const {
@@ -76,7 +77,10 @@ const Cart = () => {
                       <td className="p-2 md:p-4 text-[14px]">
                         <button
                           className="text-red-500 hover:text-red-700"
-                          onClick={() => removeFromCart(course.id)}
+                          onClick={() => {
+                            removeFromCart(course.id);
+                            toast.success(`Cart remove successfully!`);
+                          }}
                         >
                           <RiDeleteBin5Line size={20} />
                         </button>
@@ -106,6 +110,7 @@ const Cart = () => {
           <p className="text-gray-600 text-lg">Your cart is empty.</p>
         )}
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
