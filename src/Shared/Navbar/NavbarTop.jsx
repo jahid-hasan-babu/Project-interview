@@ -76,43 +76,48 @@ const NavbarTop = () => {
         <div className="hidden lg:block"></div>
 
         <div className="flex items-center">
-          <Link
-            to="/cart"
-            className="relative flex items-center"
-            onMouseEnter={() => setShowCartDetails(true)}
-            onMouseLeave={() => setShowCartDetails(false)}
-          >
-            <FaCartArrowDown className="w-[35px] h-[35px] text-black" />
+          <Link to="/cart" className="relative flex items-center">
+            <FaCartArrowDown
+              className="w-[35px] h-[35px] text-black"
+              onMouseEnter={() => setShowCartDetails(true)}
+              onMouseLeave={() => setShowCartDetails(false)}
+            />
             <div className="badge badge-primary bg-purple rounded-full text-white text-xs absolute top-0 right-0 transform translate-x-1 -translate-y-1 w-5 h-5 flex items-center justify-center">
               {getTotalCount()}
             </div>
 
             {/* Cart Details Dropdown */}
-            {showCartDetails && (
-              <div className="absolute top-10 right-0 bg-white shadow-lg rounded-md p-4 w-64 z-50">
-                {cart.length > 0 ? (
-                  <ul>
-                    {cart.map((course) => (
-                      <li
-                        key={course.id}
-                        className="flex justify-between items-center py-2 border-b"
-                      >
-                        <span className="text-sm font-medium text-black">
-                          {course.course_name}
-                        </span>
-                        <span className="text-sm font-semibold text-black">
-                          ${course.discount_price}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-center text-black">
-                    Your cart is empty
-                  </p>
-                )}
-              </div>
-            )}
+            <div
+              className={`absolute top-10 right-0 bg-white shadow-lg rounded-md p-4 w-64 z-50 max-h-64 overflow-y-auto transition-all duration-300 ease-in-out ${
+                showCartDetails
+                  ? "opacity-100 scale-100"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
+              onMouseEnter={() => setShowCartDetails(true)} // Keep it visible when hovered
+              onMouseLeave={() => setShowCartDetails(false)} // Hide when mouse leaves
+            >
+              {cart.length > 0 ? (
+                <ul>
+                  {cart.map((course) => (
+                    <li
+                      key={course.id}
+                      className="flex justify-between items-center py-2 border-b"
+                    >
+                      <span className="text-sm font-medium text-black">
+                        {course.course_name}
+                      </span>
+                      <span className="text-sm font-semibold text-black">
+                        ${course.discount_price}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-center text-black">
+                  Your cart is empty
+                </p>
+              )}
+            </div>
           </Link>
 
           <div className="flex flex-col items-center justify-center text-text_sm font-semibold relative group">
