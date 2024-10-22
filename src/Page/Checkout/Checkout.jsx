@@ -101,8 +101,6 @@ const Checkout = () => {
       user_id: 1, // Replace with actual user ID if applicable
     };
 
-    console.log(admissionData);
-
     // Sending the admissionData to the API
     try {
       const response = await axios.post(
@@ -117,7 +115,8 @@ const Checkout = () => {
       // Handle success response
       toast.success("Data submit success");
       // save data in session storage
-      sessionStorage.setItem("response", JSON.stringify(response));
+      sessionStorage.setItem("courseDetails", JSON.stringify(cart));
+      sessionStorage.setItem("orderDetails", JSON.stringify(response));
       // Redirect to success page
       window.location.href = "/order-details";
     } catch (error) {
