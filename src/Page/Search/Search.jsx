@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Search = () => {
   const [formNo, setFormNo] = useState("");
@@ -8,6 +10,11 @@ const Search = () => {
   const [searchResult, setSearchResult] = useState(null);
 
   const handleSearch = async () => {
+    if (!formNo || !phoneNo) {
+      toast.error("Please fill in both the Form Number and Phone Number.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "https://itder.com/api/search-purchase-data",
@@ -19,16 +26,25 @@ const Search = () => {
 
       if (response.status === 201) {
         setSearchResult(response.data.singleCoursePurchaseData);
+        toast.success("Search successful!");
         console.log("Search Result:", response.data.singleCoursePurchaseData);
+      } else {
+        toast.error(
+          "No data found! Please check the form number and phone number."
+        );
       }
     } catch (error) {
       console.error("Error fetching search result:", error);
-      setSearchResult(null); // Reset search result on error
+      setSearchResult(null);
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while fetching the data."
+      );
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col text-text_40px font-bold items-center justify-center">
+    <div className="min-h-screen flex flex-col  font-bold items-center justify-center">
       <h1 className="w-[600px] mx-auto">Search here</h1>
       <div className="h-[52px] relative col-span-4 w-[600px] mx-auto mb-4">
         <input
@@ -77,6 +93,8 @@ const Search = () => {
           />
         </div>
       )}
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
